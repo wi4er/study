@@ -1,0 +1,67 @@
+.example1 {
+    display: grid;
+    grid-template-columns: 70px 70px 70px;
+    grid-template-rows: 70px 70px 70px;
+    grid-gap: 15px;
+    grid-auto-columns: min-content;
+
+    padding: 50px;
+}
+
+.example2 {
+    display: grid;
+    grid-template-columns: 1fr 2fr 3fr;
+    grid-template-rows: 70px 70px 70px;
+    grid-gap: 15px;
+    grid-auto-columns: min-content;
+
+    padding: 50px;
+}
+
+.example3 {
+    display: grid;
+    grid-template-columns: 100px 2fr 2fr;
+    grid-template-rows: 70px 70px 70px;
+    grid-gap: 15px;
+    grid-auto-columns: min-content;
+
+    padding: 50px;
+}
+
+.example4 {
+    display: grid;
+    grid-template-columns: 20% 20% 20%;
+    grid-template-rows: 70px 70px 70px;
+    grid-gap: 10%;
+    grid-auto-columns: min-content;
+
+    padding: 50px;
+}
+
+.example5 {
+    display: grid;
+    grid-template-columns: 100px 100px;
+    grid-template-rows: 100px 100px;
+    grid-gap: 15px;
+    grid-auto-flow: column;
+
+    padding: 50px;
+}
+
+.title {
+    padding-left: 100px;
+}
+
+.item {
+    width: 100%;
+    height: 100%;
+
+}
+
+.item:nth-child(2n) {
+    background-color: red;
+}
+
+.item:nth-child(2n - 1) {
+    background-color: blue;
+}

@@ -1,0 +1,27 @@
+
+.example1 {
+    display: grid;
+    grid-template-columns: 100px 100px 100px;
+    grid-template-rows: repeat(3, 100px);
+    grid-gap: 10px;
+
+    grid-template-areas:
+        'aaa bbb bbb'
+        'aaa ccc ccc'
+        'aaa ccc ccc';
+}
+
+.first {
+    background-color: firebrick;
+    grid-area: aaa;
+}
+
+.second {
+    background-color: deepskyblue;
+    grid-area: bbb;
+}
+
+.third {
+    background-color: darkviolet;
+    grid-area: ccc;
+}

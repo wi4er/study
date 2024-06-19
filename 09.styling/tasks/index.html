@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+
+<body>
+    <script>
+       console.log("TICK");
+
+       Promise.resolve()
+           .then(() => console.log(">>>>> TASK"))
+           .then(() => console.log(">>>>> TASK"));
+    </script>
+
+    <script>
+        console.log("TACK");
+
+        setTimeout(() => {
+            console.log(">>>>> TIMEOUT")
+        });
+
+        Promise.resolve()
+            .then(() => console.log(">>>>> TASK"))
+            .then(() => console.log(">>>>> TASK"));
+    </script>
+
+    <script>
+        console.log("END");
+    </script>
+</body>
+</html>
