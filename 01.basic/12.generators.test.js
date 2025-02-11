@@ -1,4 +1,4 @@
-describe("Generators", function () {
+describe("Generators", () => {
     /**
      *
      * Можно создать генератор
@@ -9,9 +9,66 @@ describe("Generators", function () {
         }
 
         const iterator = getValue();
-        
+
         expect(typeof iterator[Symbol.iterator]).toBe("function");
         expect([...iterator]).toEqual(["VALUE"]);
+    });
+
+
+    test('Should call next in iterator', () => {
+        const fire = jest.fn();
+
+        function* getValue() {
+            fire();
+            yield "VALUE";
+            fire();
+        }
+
+        const iterator = getValue();
+        expect(fire).toBeCalledTimes(0);
+
+        iterator.next();
+        expect(fire).toBeCalledTimes(1);
+
+        iterator.next();
+        expect(fire).toBeCalledTimes(2);
+    });
+
+
+    test('Should send value to iterator', () => {
+        const fire = jest.fn();
+
+        function* getValue(first) {
+            fire(first);
+
+            fire(yield);
+        }
+
+        const iterator = getValue('FIRST');
+
+        iterator.next();
+        expect(fire).toBeCalledWith('FIRST');
+
+        iterator.next('VALUE')
+        expect(fire).toBeCalledWith('VALUE');
+    });
+
+    /**
+     *
+     * Значение возвращённое return игнорируется, но выполнение прекращается
+     */
+    test('Should have return', () => {
+        function* getValue() {
+            yield "First";
+
+            return "RETURN";
+
+            yield "Second";
+        }
+
+        const iterator = getValue();
+
+        expect([...iterator]).toEqual(["First"]);
     });
 
     /**
@@ -19,7 +76,7 @@ describe("Generators", function () {
      * Можно заспредить генератор
      */
     test("Should spread generator", () => {
-        function *getValue() {
+        function* getValue() {
             for (let i = 1; i <= 5; i++) {
                 yield i;
             }
@@ -32,8 +89,8 @@ describe("Generators", function () {
      *
      * Можно проитерировать генератор через for-of
      */
-    test("Should iterate generator", () => {
-        function *getValue() {
+    test("Should iterate generator with for-of", () => {
+        function* getValue() {
             for (let i = 1; i <= 5; i++) {
                 yield i;
             }
@@ -48,12 +105,30 @@ describe("Generators", function () {
         expect(count).toEqual(15);
     });
 
+    test("Should iterate generator with while-do", () => {
+        function* getValue() {
+            for (let i = 1; i <= 5; i++) {
+                yield i;
+            }
+        }
+
+        let count = 0;
+        const iterator = getValue();
+        let next;
+
+        while (next = iterator.next(), !next.done) {
+            count += next.value;
+        }
+
+        expect(count).toEqual(15);
+    });
+
     /**
      *
      * Можно передать генератор в качестве аргумента
      */
     test("Should set generator as attribute", () => {
-        function *getValue(max) {
+        function* getValue(max) {
             for (let i = 1; i <= max; i++) {
                 yield [i, i * 10];
             }
@@ -77,7 +152,7 @@ describe("Generators", function () {
      */
     test("Should create generator property", () => {
         const obj = {
-            *create() {
+            * create() {
                 for (let i = 1; i <= 100; i++) {
                     yield i;
                 }
@@ -103,7 +178,7 @@ describe("Generators", function () {
                 this.max = max;
             }
 
-            *create() {
+            * create() {
                 for (let i = 1; i <= this.max; i++) {
                     yield i;
                 }
@@ -130,7 +205,7 @@ describe("Generators", function () {
                 this.max = max;
             }
 
-            *[Symbol.iterator]() {
+            * [Symbol.iterator]() {
                 for (let i = 0; i <= this.max; i++) {
                     yield i;
                 }
@@ -164,9 +239,9 @@ describe("Generators", function () {
                 yield* getNumber(i);
             }
         }
-        
+
         let result = "";
-        
+
         for (const item of getValue(5)) {
             result += item;
         }
