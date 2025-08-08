@@ -10,7 +10,7 @@ describe("Iterator", () => {
         expect(typeof arr[Symbol.iterator]).toBe("function");
 
         for (let item of arr) {
-             count += item;
+            count += item;
         }
 
         expect(count).toBe(15);
@@ -130,7 +130,32 @@ describe("Iterator", () => {
 
         expect(typeof obj[Symbol.iterator]).toBe("function");
 
+        const iterator = obj[Symbol.iterator]()
+
         for (let item of obj) {
+            count += item;
+        }
+
+        expect(count).toBe(15);
+    });
+
+    test("Should iterate iterator object", () => {
+        const obj = {
+            [Symbol.iterator]() {
+                return {
+                    next() {
+                        return {
+                            value: ++this.value,
+                            done: this.value > 5,
+                        }
+                    },
+                    value: 0,
+                };
+            },
+        };
+
+        let count = 0;
+        for (const item of obj) {
             count += item;
         }
 
@@ -138,7 +163,7 @@ describe("Iterator", () => {
     });
 });
 
-describe("Async iterator",  () => {
+describe("Async iterator", () => {
     /**
      *
      * Итерация через асинхронную функция
@@ -227,7 +252,7 @@ describe("Async iterator",  () => {
                 this.max = max;
             }
 
-            async *[Symbol.asyncIterator]() {
+            async* [Symbol.asyncIterator]() {
                 const {max} = this;
 
                 for (let i = 0; i <= max; i++) {

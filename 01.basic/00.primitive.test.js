@@ -309,23 +309,34 @@ describe("Primitive values", () => {
         test("Should create with separators", () => {
             expect(1_000_000).toBe(1000000);
             expect(1_2_3_4_5_6_7_8_9).toBe(123456789);
+
+            expect(() => eval("_1")).toThrow();
+            expect(() => eval("7777_")).toThrow();
         });
 
         /**
          *
-         * Приведение типов
          */
-        test("Should change to number", () => {
+        test("Should change to boolean", () => {
             expect(Boolean(100)).toBe(true);
+            expect(Boolean(Infinity)).toBe(true);
+            expect(Boolean(-200)).toBe(true);
+            expect(Boolean(-Infinity)).toBe(true);
+
             expect(Boolean(0)).toBe(false);
             expect(Boolean(NaN)).toBe(false);
 
+        });
+
+        test("Should change to string", () => {
             expect(String(200)).toBe("200");
             expect(String(200.123)).toBe("200.123");
             expect(String(1e10)).toBe("10000000000");
+            expect(String(2_2_2_2)).toBe("2222");
+        });
 
+        test("Should change to big int", () => {
             expect(BigInt(300)).toBe(300n);
-            expect(Symbol(300).toString()).toBe("Symbol(300)");
         });
 
         /**

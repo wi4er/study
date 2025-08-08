@@ -88,7 +88,7 @@ describe("Iteration statements", () => {
          *
          * Без выражений в скобках получим бесконечный цикл
          */
-        test("Should iterate without params", () => {
+        test("Should iterate without expressions", () => {
             let i = 0;
             let count = 0;
 
@@ -99,6 +99,22 @@ describe("Iteration statements", () => {
             }
 
             expect(count).toBe(105);
+        });
+
+        /**
+         *
+         */
+        test("Should break iteration with return", () => {
+            function execute() {
+                let count = 0;
+                let i = 0;
+
+                for (;;) {
+                    if ((count += ++i) > 10) return count;
+                }
+            }
+
+            expect(execute()).toBe(15);
         });
     });
 
@@ -139,7 +155,7 @@ describe("Iteration statements", () => {
          *
          * При итерации примитива ошибки не будет но и тело цикла не выполнится
          */
-        test("Shouldn't iterate null", () => {
+        test("Shouldn't iterate some primitives", () => {
             for (let key in null) {
                 fail("Not here!!!");
             }
@@ -256,6 +272,7 @@ describe("Iteration statements", () => {
                     },
                     b: {
                         value: 2,
+                        enumerable: false,
                     },
                     c: {
                         value: 3,
@@ -437,7 +454,7 @@ describe("Iteration statements", () => {
                 fire(i);
             }
 
-            expect(fire).toBeCalledTimes(5);
+            expect(fire).toHaveBeenCalledTimes(5);
             expect(fire.mock.calls[0][0]).toBe(6);
             expect(fire.mock.calls[1][0]).toBe(5);
             expect(fire.mock.calls[2][0]).toBe(4);

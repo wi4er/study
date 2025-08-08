@@ -25,13 +25,13 @@ describe("Generators", () => {
         }
 
         const iterator = getValue();
-        expect(fire).toBeCalledTimes(0);
+        expect(fire).toHaveBeenCalledTimes(0);
 
         iterator.next();
-        expect(fire).toBeCalledTimes(1);
+        expect(fire).toHaveBeenCalledTimes(1);
 
         iterator.next();
-        expect(fire).toBeCalledTimes(2);
+        expect(fire).toHaveBeenCalledTimes(2);
     });
 
 
@@ -47,10 +47,10 @@ describe("Generators", () => {
         const iterator = getValue('FIRST');
 
         iterator.next();
-        expect(fire).toBeCalledWith('FIRST');
+        expect(fire).toHaveBeenCalledWith('FIRST');
 
         iterator.next('VALUE')
-        expect(fire).toBeCalledWith('VALUE');
+        expect(fire).toHaveBeenCalledWith('VALUE');
     });
 
     /**

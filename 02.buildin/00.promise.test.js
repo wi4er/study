@@ -163,6 +163,17 @@ describe("Promise", () => {
         });
     });
 
+    describe('Promise chaining', () => {
+        test('Should chain', async () => {
+
+            const inst = new Promise(resolve => resolve(10))
+
+
+            console.log(data);
+        });
+    });
+
+
     describe("Promise extension", () => {
         test("Should extend", () => {
             class Custom extends Promise {
@@ -204,114 +215,138 @@ describe("Promise", () => {
     });
 
     describe("Promise functions", () => {
-        /**
-         *
-         * Можно создать промис в состоянии resolved
-         */
-        it("Should resolve with resolve", done => {
-            Promise.resolve("DONE")
-                .then(result => expect(result).toBe("DONE"))
-                .then(done);
-        });
+        describe("Promise.resolve", () => {
+            /**
+             *
+             * Можно создать промис в состоянии resolved
+             */
+            it("Should resolve with resolve", done => {
+                Promise.resolve("DONE")
+                    .then(result => expect(result).toBe("DONE"))
+                    .then(done);
+            });
 
-        /**
-         *
-         */
-        it("Should resolve with resolve args", done => {
-            const inst = new Promise(resolve => resolve(10));
+            /**
+             *
+             */
+            it("Should resolve with resolve args", done => {
+                const inst = new Promise(resolve => resolve(10));
 
-            Promise.resolve(inst)
-                .then(result => expect(result).toBe(10))
-                .then(done);
-        });
-
-        /**
-         *
-         * Можно создать промис в состоянии rejected
-         */
-        it("Should resolve with resolve", done => {
-            Promise.reject("ERROR")
-                .catch(result => expect(result).toBe("ERROR"))
-                .then(done);
-        });
-
-        /**
-         *
-         * Можно вернуть созданный промис результатом обработчика
-         */
-        it("Should reject in resolver", done => {
-            new Promise(resolve => resolve())
-                .then(() => Promise.reject())
-                .then(() => fail("RESOLVED!"))
-                .catch(done);
-        });
-
-        /**
-         *
-         * Можно выполнить несколько промисов одновременно.
-         * Promise.all возвращает новый промис
-         */
-        it("Should resolve with all", done => {
-            Promise.all([
-                new Promise(resolve => resolve(1)),
-                new Promise(resolve => resolve(2)),
-                new Promise(resolve => resolve(3)),
-            ])
-                .then(result => expect(result).toEqual([1, 2, 3]))
-                .then(done);
-        });
-
-        /**
-         *
-         * Можно выполнить несколько PromiseLike объектов одновременно
-         */
-        it("Should resolve with promise like", () => {
-            Promise.all([
-                {
-                    then(resolve) {
-                        resolve(100);
-                    }
-                }, {
-                    then(resolve) {
-                        resolve(200);
-                    }
-                }, {
-                    then(resolve) {
-                        resolve(300);
-                    }
-                }
-            ]).then(result => {
-                expect(result).toEqual([100, 200, 300]);
+                Promise.resolve(inst)
+                    .then(result => expect(result).toBe(10))
+                    .then(done);
             });
         });
 
-        /**
-         *
-         * Можно передать в Promise.all любой итератор
-         */
-        it("Should resolve with set", done => {
-            const set = new Set();
-            set.add(new Promise(resolve => resolve(100)));
-            set.add(new Promise(resolve => resolve(200)));
-            set.add(new Promise(resolve => resolve(300)));
+        describe("Promise.reject", () => {
+            /**
+             *
+             * Можно создать промис в состоянии rejected
+             */
+            it("Should resolve with resolve", done => {
+                Promise.reject("ERROR")
+                    .catch(result => expect(result).toBe("ERROR"))
+                    .then(done);
+            });
 
-            Promise.all(set)
-                .then(resolve => expect(resolve).toEqual([100, 200, 300]))
-                .then(done);
+            /**
+             *
+             * Можно вернуть созданный промис результатом обработчика
+             */
+            it("Should reject in resolver", done => {
+                new Promise(resolve => resolve())
+                    .then(() => Promise.reject())
+                    .then(() => fail("RESOLVED!"))
+                    .catch(done);
+            });
         });
 
-        /**
-         *
-         * В случае завершения хотя-бы одного промиса в итераторе аргумента как rejected
-         * промис результата закрывается как rejected
-         */
-        it("Should reject with all", done => {
-            Promise.all([
-                new Promise((resolve, reject) => reject()),
-                new Promise(resolve => resolve(2)),
-                new Promise(resolve => resolve(3)),
-            ])
-                .catch(done);
+        describe("Promise.all", () => {
+            /**
+             *
+             * Можно выполнить несколько промисов одновременно.
+             * Promise.all возвращает новый промис
+             */
+            it("Should resolve with all", done => {
+                Promise.all([
+                    new Promise(resolve => resolve(1)),
+                    new Promise(resolve => resolve(2)),
+                    new Promise(resolve => resolve(3)),
+                ])
+                    .then(result => expect(result).toEqual([1, 2, 3]))
+                    .then(done);
+            });
+
+            /**
+             *
+             */
+            it("Should resolve with all", done => {
+                Promise.all([
+                    11,
+                    22,
+                    33,
+                ])
+                    .then(result => expect(result).toEqual([11, 22, 33]))
+                    .then(done);
+            });
+
+            /**
+             *
+             * Можно выполнить несколько PromiseLike объектов одновременно
+             */
+            it("Should resolve with promise like", () => {
+                Promise.all([
+                    {
+                        then(resolve) {
+                            resolve(100);
+                        }
+                    }, {
+                        then(resolve) {
+                            resolve(200);
+                        }
+                    }, {
+                        then(resolve) {
+                            resolve(300);
+                        }
+                    }
+                ]).then(result => {
+                    expect(result).toEqual([100, 200, 300]);
+                });
+            });
+
+            /**
+             *
+             * Можно передать в Promise.all любой итератор
+             */
+            it("Should resolve with set", done => {
+                const set = new Set();
+                set.add(new Promise(resolve => resolve(100)));
+                set.add(new Promise(resolve => resolve(200)));
+                set.add(new Promise(resolve => resolve(300)));
+
+                Promise.all(set)
+                    .then(resolve => expect(resolve).toEqual([100, 200, 300]))
+                    .then(done);
+            });
+
+            /**
+             *
+             * В случае завершения хотя-бы одного промиса в итераторе аргумента как rejected
+             * промис результата закрывается как rejected
+             */
+            it("Should reject with all", done => {
+                Promise.all([
+                    new Promise((resolve, reject) => reject()),
+                    new Promise(resolve => resolve(2)),
+                    new Promise(resolve => resolve(3)),
+                ]).catch(done);
+            });
+        });
+
+        describe("Promise.race", () => {
+            it("Should", async () => {
+
+            });
         });
 
         /**
@@ -338,32 +373,54 @@ describe("Promise", () => {
                 .then(done);
         });
 
-        /**
-         *
-         * Можно выполнить несколько промисов с результатов в виде первого закрытого промиса
-         */
-        it("Should resolve with race", done => {
-            Promise.race([
-                new Promise(resolve => resolve(1)),
-                new Promise(resolve => resolve(2)),
-                new Promise(resolve => resolve(3)),
-            ])
-                .then(result => expect(result).toBe(1))
-                .then(done);
-        });
+        describe('Promise.race', () => {
+            /**
+             *
+             * Можно выполнить несколько промисов с результатов в виде первого закрытого промиса
+             */
+            it("Should resolve with race", async () => {
+                const value = await Promise.race([
+                    new Promise(resolve => resolve(1)),
+                    new Promise(resolve => resolve(2)),
+                    new Promise(resolve => resolve(3)),
+                ]);
 
-        /**
-         *
-         * Порядок промисов в итераторе не имеет значения
-         */
-        it("Should reject with race and timeout", done => {
-            Promise.race([
-                new Promise(resolve => setTimeout(() => resolve(1), 10)),
-                new Promise(resolve => setTimeout(() => resolve(2), 5)),
-                new Promise(resolve => setTimeout(() => resolve(3), 20)),
-            ])
-                .then(result => expect(result).toBe(2))
-                .then(done);
+                expect(value).toBe(1);
+            });
+
+            it("Should reject with race", async () => {
+                const inst = Promise.race([
+                    new Promise((resolve, reject) => reject(111)),
+                    new Promise(resolve => resolve(222)),
+                    new Promise(resolve => resolve(333)),
+                ]);
+
+                await expect(inst).rejects.toBe(111);
+            });
+
+            it("Should reject with race", async () => {
+                const inst = Promise.race([
+                    new Promise(resolve => resolve(111)),
+                    new Promise((resolve, reject) => reject(222)),
+                    new Promise((resolve, reject) => reject(333)),
+                ]);
+
+                await expect(inst).resolves.toBe(111);
+            });
+
+            /**
+             *
+             * Порядок промисов в итераторе не имеет значения
+             */
+            it("Should reject with race and timeout", async () => {
+                const value = await Promise.race([
+                    new Promise(resolve => setTimeout(() => resolve(1), 10)),
+                    new Promise(resolve => setTimeout(() => resolve(2), 5)),
+                    new Promise(resolve => setTimeout(() => resolve(3), 20)),
+                ]);
+
+                expect(value).toBe(2);
+            });
         });
     });
 });

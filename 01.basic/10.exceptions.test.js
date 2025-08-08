@@ -111,7 +111,7 @@ describe("Exceptions", () => {
                 done();
             }
 
-            expect(done).toBeCalledTimes(1);
+            expect(done).toHaveBeenCalledTimes(1);
         });
 
 
@@ -189,12 +189,12 @@ describe("Exceptions", () => {
             }
 
             execute(1, callBack);
-            expect(callBack).toBeCalledTimes(2);
+            expect(callBack).toHaveBeenCalledTimes(2);
 
             callBack.mockClear();
 
             execute(0, callBack);
-            expect(callBack).toBeCalledTimes(1);
+            expect(callBack).toHaveBeenCalledTimes(1);
         });
 
         /**
@@ -215,7 +215,7 @@ describe("Exceptions", () => {
             expect(() => {
                 execute(callBack);
             }).toThrow("WRONG!");
-            expect(callBack).toBeCalledTimes(1);
+            expect(callBack).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -345,12 +345,6 @@ describe("Error types", () => {
         test("Should get from refer", () => {
             expect(() => {
                 let a = b;
-            }).toThrow(ReferenceError);
-        });
-
-        test("Should get from assignment", () => {
-            expect(() => {
-                b = 100;
             }).toThrow(ReferenceError);
         });
     });

@@ -34,12 +34,24 @@ describe("Async await test", () => {
          *
          * Результатом асинхронной функции является результат промиса
          */
-        it("Should get results", () => {
+        it("Should get results", async () => {
             async function get() {
                 return "TEXT";
             }
 
-            get().then(result => expect(result).toBe("TEXT"));
+            const value = get();
+
+            await expect(value).resolves.toBe("TEXT");
+        });
+
+        it("Should get reason", async () => {
+            async function get() {
+                throw new Error("ERROR");
+            }
+
+            const value = get();
+
+            await expect(value).rejects.toThrow("ERROR");
         });
 
         /**
@@ -57,21 +69,21 @@ describe("Async await test", () => {
          *
          * Можно передать аргументы в асинхронную функцию
          */
-        it("Should get arguments", done => {
+        it("Should get arguments", async () => {
             async function getValue(value) {
                 return `VALUE ${value}`;
             }
 
-            getValue(123)
-                .then(result => expect(result).toBe("VALUE 123"))
-                .then(done);
+            const value = getValue(123);
+
+            await expect(value).resolves.toBe("VALUE 123");
         });
 
         /**
          *
          * Асинхронный метод может быть методом
          */
-        it("Should be method", done => {
+        it("Should be method", async () => {
             class Custom {
                 async getValue() {
                     return "VALUE";
@@ -79,12 +91,9 @@ describe("Async await test", () => {
             }
 
             const inst = new Custom();
+            const value = 'inst.getValue();
 
-            inst.getValue()
-                .then(result => {
-                    expect(result).toBe("VALUE");
-                })
-                .then(done);
+            await expect(value).resolves.toBe("VALUE");
         });
 
         /**
